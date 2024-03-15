@@ -1,10 +1,11 @@
-import express from 'express';
-  import mongoose from 'mongoose';
-  import dotenv from 'dotenv';
-  import cors from 'cors';
-  import { Webhook } from 'svix';
-  import bodyParser from 'body-parser';
-  import User from './models/UserModel.js';
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors'); 
+const { Webhook } = require('svix'); 
+const bodyParser = require('body-parser');
+const User = require('./models/UserModel.js');
+const router = require('./routes/events.js'); 
 
   dotenv.config();
 
@@ -61,6 +62,8 @@ import express from 'express';
       }
     }
   );
+
+  app.use('/api/events',router); 
 
   const port = process.env.PORT || 5000;
 
