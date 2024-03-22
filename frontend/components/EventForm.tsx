@@ -20,6 +20,9 @@ import Dropdown from "./Dropdown"
 import { Textarea } from "./ui/textarea"
 import { FileUploader } from "./FileUploader"
 import { useState } from "react"
+import DatePicker from "react-datepicker";
+import Image from "next/image"
+import "react-datepicker/dist/react-datepicker.css";
 type EventFormProps  = {
 userId:string,
 type:"Create" | "Update" 
@@ -100,7 +103,98 @@ const initialValues= eventDefaultValues
             )}
           />
         </div>
-      <Button type="submit">Submit</Button>
+        <div className="flex flex-col gap-5 md:flex-row">
+          <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <div className="flex items-center h-[54px] w-full overflow-hidden rounded-full bg-gray-50 px-4 py-2">
+                      <Image
+                        src="/location-grey.svg"
+                        alt="calendar"
+                        width={24}
+                        height={24}
+                      />
+
+                      <Input placeholder="Event location or Online" {...field} className="input-field" />
+                    </div>
+
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+        </div>
+        <div className="flex flex-col gap-5 md:flex-row">
+          <FormField
+              control={form.control}
+              name="startDateTime"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <div className="flex items-center h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
+                      <Image
+                        src="/calendar.svg"
+                        alt="calendar"
+                        width={24}
+                        height={24}
+                        className="filter-grey"
+                      />
+                      <p className="ml-3 whitespace-nowrap text-gray-500">Start Date:</p>
+                      <DatePicker 
+                        selected={field.value} 
+                        onChange={(date: Date) => field.onChange(date)} 
+                        showTimeSelect
+                        timeInputLabel="Time:"
+                        dateFormat="MM/dd/yyyy h:mm aa"
+                        wrapperClassName="datePicker"
+                      />
+                    </div>
+
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+        
+          <FormField
+              control={form.control}
+              name="endDateTime"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <div className="flex items-center  h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
+                      <Image
+                        src="/calendar.svg"
+                        alt="calendar"
+                        width={24}
+                        height={24}
+                        className="filter-grey"
+                      />
+                      <p className="ml-3 whitespace-nowrap text-gray-600">End Date:</p>
+                      <DatePicker 
+                        selected={field.value} 
+                        onChange={(date: Date) => field.onChange(date)} 
+                        showTimeSelect
+                        timeInputLabel="Time:"
+                        dateFormat="MM/dd/yyyy h:mm aa"
+                        wrapperClassName="datePicker"
+                      />
+                    </div>
+
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+        </div>
+
+      <Button type="submit" className="bg-purple-500 rounded-full w-full" 
+      size="lg" disabled={form.formState.isSubmitting}> {form.formState.isSubmitting ? (
+        'Submitting...'
+      ): `${type} Event `}</Button>
     </form>
   </Form>
   )
