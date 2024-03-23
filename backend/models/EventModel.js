@@ -9,8 +9,8 @@ const eventSchema = new mongoose.Schema({
     imageUrl: { type: String, required: true },
     startDateTime: { type: Date, default: Date.now },
     endDateTime: { type: Date, default: Date.now },
-    category: { type: Schema.Types.ObjectId, ref: 'Category' },
-    organizer: { type: Schema.Types.ObjectId, ref: 'User' },
+    category: { type: String},
+    // organizer: { type: Schema.Types.ObjectId, ref: 'User' },
   }
 );
 

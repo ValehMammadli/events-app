@@ -9,7 +9,7 @@ async function createEvent(req, res) {
         // Prepare your Event data (consider security and additional fields)
         const eventData = {
             ...validatedData,
-            organizer: req.userId // Assuming you have authentication and userId
+           // Assuming you have authentication and userId
         };
 
         // Create a new Event object

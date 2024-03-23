@@ -23,6 +23,9 @@ import { useState } from "react"
 import DatePicker from "react-datepicker";
 import Image from "next/image"
 import "react-datepicker/dist/react-datepicker.css";
+import { useUploadThing } from "@/lib/uploadthing"
+import { useRouter } from "next/navigation"
+import { Router } from "next/router"
 type EventFormProps  = {
 userId:string,
 type:"Create" | "Update" 
@@ -32,17 +35,51 @@ type:"Create" | "Update"
 const EventForm = ({userId,type}:EventFormProps) => {
   const [files, setFiles] = useState<File[]>([])
 const initialValues= eventDefaultValues
+const router = useRouter();
+const { startUpload } = useUploadThing('imageUploader')
     const form = useForm<z.infer<typeof eventFormSchema>>({
         resolver: zodResolver(eventFormSchema),
         defaultValues: initialValues
       })
      
       // 2. Define a submit handler.
-      function onSubmit(values: z.infer<typeof  eventFormSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+      async function onSubmit(values: z.infer<typeof  eventFormSchema>) {
+        let uploadedImageUrl = values.imageUrl;
+
+    if(files.length > 0) {
+      const uploadedImages = await startUpload(files)
+
+      if(!uploadedImages) {
+        return
       }
+
+      uploadedImageUrl = uploadedImages[0].url
+    }
+    if(type === 'Create') { try{
+      const formattedData = {...values,  imageUrl : uploadedImageUrl};
+
+      const response = await fetch('/api/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formattedData)
+      });
+      const json = await response.json()
+      if (response.ok) {
+        console.log('new event added:', json)
+          router.push('/'); // Or another success redirection
+      } else {
+          
+          console.error('Event creation failed:', json.error);
+          // Handle errors, display messages to the user
+      }
+  } catch (error) {
+      console.error('Error submitting form:', error);
+      // Handle network errors and other unexpected issues
+  }
+}
+    }
+
+      
   return (
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
