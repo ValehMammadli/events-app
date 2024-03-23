@@ -6,5 +6,5 @@ export const eventDefaultValues = {
     startDateTime: new Date(),
     endDateTime: new Date(),
     categoryId: '',
-    url: '',
+  
   }

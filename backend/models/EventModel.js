@@ -2,16 +2,36 @@
 const mongoose = require('mongoose');
 
 const eventSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: { type: String },
-    location: { type: String },
-    createdAt: { type: Date, default: Date.now },
-    imageUrl: { type: String, required: true },
-    startDateTime: { type: Date, default: Date.now },
-    endDateTime: { type: Date, default: Date.now },
-    category: { type: String},
-    // organizer: { type: Schema.Types.ObjectId, ref: 'User' },
-  }
-);
+  title: { 
+      type: String, 
+      required: true, 
+     // Derived from Zod
+  },
+  description: { 
+      type: String,  
+      required: true, // Match front-end validation
+    
+  },
+  location: { 
+      type: String, 
+      required: true, // Match front-end validation
+     
+  },
+  imageUrl: { 
+      type: String, 
+  }, 
+  startDateTime: { 
+      type: Date, 
+      required: true,  
+  },
+  endDateTime: { 
+      type: Date, 
+      required: true, 
+  },
+  categoryId: { 
+      type: String,
+  },
+   // ... (organizer field when ready)
+});
 
 module.exports = mongoose.model('Event', eventSchema);

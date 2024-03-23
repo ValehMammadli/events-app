@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const User = require('./models/UserModel.js');
 const router = require('./routes/events.js'); 
 
+
+
   dotenv.config();
 
   // Connect mongoose to database
@@ -62,7 +64,7 @@ const router = require('./routes/events.js');
       }
     }
   );
-
+  app.use(bodyParser.json());
   app.use('/api/events',router); 
 
   const port = process.env.PORT || 5000;

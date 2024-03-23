@@ -1,28 +1,36 @@
-// controllers/eventController.js
 const Event = require('../models/EventModel.js');
 
 async function createEvent(req, res) {
     try {
-        // Validate the request body (Zod validation can be reused)
-        const validatedData = req.body;
-
-        // Prepare your Event data (consider security and additional fields)
-        const eventData = {
-            ...validatedData,
-           // Assuming you have authentication and userId
-        };
-
-        // Create a new Event object
-        const newEvent = new Event(eventData);
-
-        // Save to the database
-        const savedEvent = await newEvent.save();
-
-        res.status(201).json({ message: 'Event created', event: savedEvent });
+        console.log(req.body);
+      // 1. Destructure and Perform Basic Validation
+      const { events: { title, description, location, imageUrl, startDateTime, endDateTime, categoryId } } = req.body;
+  
+      if (!title || !imageUrl || !startDateTime || !endDateTime) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+  
+      // 2. Prepare Event Data (Assuming authentication)
+      const eventData = {
+        title,
+        description,
+        location,
+        imageUrl,
+        startDateTime,
+        endDateTime,
+        categoryId,
+        // Assuming you have authentication in place
+      };
+  
+      // 3. Create and Save
+      const newEvent = await Event.create(eventData);
+  
+      // 4. Success Response
+      res.status(201).json({ message: 'Event created', event: newEvent }); 
+  
     } catch (error) {
-        // Consider more specific error handling based on error types
-        res.status(500).json({ message: 'Error creating event', error }); 
+      res.status(400).json({ error: error.message });
     }
-}
-
-module.exports = { createEvent }; 
+  }
+  
+  module.exports = { createEvent }; 

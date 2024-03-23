@@ -25,7 +25,7 @@ import Image from "next/image"
 import "react-datepicker/dist/react-datepicker.css";
 import { useUploadThing } from "@/lib/uploadthing"
 import { useRouter } from "next/navigation"
-import { Router } from "next/router"
+
 type EventFormProps  = {
 userId:string,
 type:"Create" | "Update" 
@@ -56,9 +56,9 @@ const { startUpload } = useUploadThing('imageUploader')
       uploadedImageUrl = uploadedImages[0].url
     }
     if(type === 'Create') { try{
-      const formattedData = {...values,  imageUrl : uploadedImageUrl};
+      const formattedData ={ events:{...values,  imageUrl : uploadedImageUrl}};
 
-      const response = await fetch('/api/events', {
+      const response = await fetch('http://localhost:4000/api/events', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formattedData)
